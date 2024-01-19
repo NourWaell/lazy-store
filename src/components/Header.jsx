@@ -2,16 +2,19 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { clearCart } from "../features/cart/cartSlice";
 import { logoutUser } from "../features/user/userSlice";
+import { useQueryClient } from "@tanstack/react-query";
 
 const Header = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const queryClient = useQueryClient();
   const user = useSelector((state) => state.userState.user);
 
   const handleLogout = () => {
     navigate("/");
     dispatch(clearCart());
     dispatch(logoutUser());
+    queryClient.removeQueries();
   };
 
   return (
@@ -30,7 +33,7 @@ const Header = () => {
         ) : (
           <div className="flex gap-x-6 justify-center items-center">
             <Link to="/login" className="link link-hover text-xs sm:text-sm">
-              Sign In / Guest
+              Sign In
             </Link>
             <Link to="/register" className="link link-hover text-xs sm:text-sm">
               Create Account

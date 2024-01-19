@@ -1,5 +1,28 @@
 import { FormInput, SubmitBtn } from "../components";
-import { Link, Form } from "react-router-dom";
+import { Form, Link, redirect } from "react-router-dom";
+import { customFetch } from "../utils";
+import { toast } from "react-toastify";
+import { loginUser } from "../features/user/userSlice";
+
+// eslint-disable-next-line react-refresh/only-export-components
+export const action =
+  (store) =>
+  async ({ request }) => {
+    const formData = await request.formData();
+    const data = Object.fromEntries(formData);
+
+    try {
+      const response = await customFetch.post("/auth/local", data);
+      store.dispatch(loginUser(response.data));
+      toast.success("Logged in successfully");
+      return redirect("/");
+    } catch (error) {
+      const errorMessage =
+        error?.response?.data?.error?.message || "Please try again";
+      toast.error(errorMessage);
+      return null;
+    }
+  };
 
 const Login = () => {
   return (
@@ -24,9 +47,6 @@ const Login = () => {
         <div className="mt-4">
           <SubmitBtn text="Login" />
         </div>
-        <button type="button" className="btn btn-secondary btn-block">
-          Guest User
-        </button>
         <p className="text-center">
           Not a member yet?{" "}
           <Link

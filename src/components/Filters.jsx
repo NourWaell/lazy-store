@@ -36,7 +36,7 @@ const Filters = () => {
         label="Sort By"
         name="order"
         size="select-sm"
-        list={["A-Z", "Z-A", "High", "Low"]}
+        list={["a-z", "z-a", "high", "low"]}
         defaultValue={order}
       />
       <FormRange
